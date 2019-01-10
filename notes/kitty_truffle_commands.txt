@@ -1,0 +1,6 @@
+let kittyBase = await KittyBase.deployed()
+
+//Created the first kitty like this:
+let kittyId = kittyBase.createKitty(213312351234, 0, 0, 0, 0)
+
+kittyBase.getKittyById(0)

@@ -33,6 +33,23 @@ contract KittyBase {
 		// todo assign ownership
 	}
 
+	function getKittyById(uint32 _id)
+		view
+		public
+		returns (
+		uint256 geneticCode,
+		uint32 parent1_id,
+		uint32 parent2_id,
+		uint32 id,
+		uint16 generation)
+	{
+		return (kitties[_id].geneticCode,
+				kitties[_id].parent1_id,
+				kitties[_id].parent2_id,
+				kitties[_id].id,
+				kitties[_id].generation);
+	}
+
 	/// @dev An array containing the Kitty struct for all Kitties in existence. The ID
     ///  of each cat is actually an index into this array.
     Kitty[] kitties;
