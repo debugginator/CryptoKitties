@@ -28,9 +28,10 @@ contract KittyBase {
 			generation: _generation,
 			birthTime: uint64(now)
 		});
-		kitties.push(_kitty);
+		uint32 _kittyId = uint32(kitties.push(_kitty));
 		// todo Birth event
 		// todo assign ownership
+		return _kittyId;
 	}
 
 	function getKittyById(uint32 _id)
