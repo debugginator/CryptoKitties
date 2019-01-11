@@ -1,2 +1,2 @@
 # CryptoKitties
-Recreation of the CryptoKitties project for an university class study.
+Re-implementation of the CryptoKitties project for an university class study.
