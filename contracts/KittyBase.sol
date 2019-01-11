@@ -6,7 +6,6 @@ contract KittyBase {
 		uint256 geneticCode; // ili string kako smo pricali
 		uint32 parent1_id;
 		uint32 parent2_id;
-		uint32 id;
 		uint16 generation;
 		uint64 birthTime;
 	}
@@ -18,7 +17,6 @@ contract KittyBase {
 		uint256 _geneticCode,
 		uint32 _parent1_id,
 		uint32 _parent2_id,
-		uint32 _id,
 		uint16 _generation) 
 		public
 		returns (uint)
@@ -27,13 +25,12 @@ contract KittyBase {
 			geneticCode: _geneticCode,
 			parent1_id: _parent1_id,
 			parent2_id: _parent2_id,
-			id: _id,
 			generation: _generation,
 			birthTime: uint64(now)
 		});
-		uint32 _kittyId = uint32(kitties.push(_kitty));
+		uint32 _kittyId = uint32(kitties.push(_kitty) - 1); // push returns new array length
 		// emit Birth event
-		emit Birth(_owner, _geneticCode, _parent1_id, _parent2_id, _id);
+		emit Birth(_owner, _geneticCode, _parent1_id, _parent2_id, _kittyId);
 		// todo assign ownership
 		return _kittyId;
 	}
@@ -45,13 +42,11 @@ contract KittyBase {
 		uint256 geneticCode,
 		uint32 parent1_id,
 		uint32 parent2_id,
-		uint32 id,
 		uint16 generation)
 	{
 		return (kitties[_id].geneticCode,
 				kitties[_id].parent1_id,
 				kitties[_id].parent2_id,
-				kitties[_id].id,
 				kitties[_id].generation);
 	}
 
