@@ -8,13 +8,21 @@ contract TestKittyBase {
 
   function testCreateFirstKitty() public {
     KittyBase kittyBase = KittyBase(DeployedAddresses.KittyBase());
+    
+    uint256 geneticCode = 213312351234;
+    uint32 parent1_id = 1;
+    uint32 parent2_id = 2;
+    uint16 generation = 3;
 
-    uint expected = uint32(0);
-    uint actual = uint32(kittyBase.createKitty(
-      DeployedAddresses.KittyBase(), // passing the contract itself as owner
-      213312351234, 0, 0, 0
+    uint32 kittyId = uint32(
+      kittyBase.createKitty(
+        DeployedAddresses.KittyBase(), // passing the contract itself as owner
+        geneticCode, parent1_id, parent2_id, generation
       )
     );
+
+    uint expected = uint32(0);
+    uint actual = uint32(kittyId);
     string memory error_message = 
       "Function createKitty was expected to return the index 0 after creation of the first kitty on the contract.";
 
