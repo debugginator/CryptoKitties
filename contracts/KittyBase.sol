@@ -11,7 +11,10 @@ contract KittyBase {
 		uint64 birthTime;
 	}
 
+	event Birth(address owner, uint256 geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint32 _id);
+
 	function createKitty(
+		address _owner,
 		uint256 _geneticCode,
 		uint32 _parent1_id,
 		uint32 _parent2_id,
@@ -29,7 +32,8 @@ contract KittyBase {
 			birthTime: uint64(now)
 		});
 		uint32 _kittyId = uint32(kitties.push(_kitty));
-		// todo Birth event
+		// emit Birth event
+		emit Birth(_owner, _geneticCode, _parent1_id, _parent2_id, _id);
 		// todo assign ownership
 		return _kittyId;
 	}
