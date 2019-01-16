@@ -1,0 +1,26 @@
+{
+  "name": "cryptokitties",
+  "version": "1.0.0",
+  "description": "Re-implementation of the CryptoKitties project.",
+  "main": "-",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "^2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debugginator/CryptoKitties.git"
+  },
+  "author": "Blaž Bagić",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/debugginator/CryptoKitties/issues"
+  },
+  "homepage": "https://github.com/debugginator/CryptoKitties#readme"
+}
