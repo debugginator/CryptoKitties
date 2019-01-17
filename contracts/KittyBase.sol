@@ -6,7 +6,7 @@ contract KittyBase {
     Kitty[] kitties;
 
     struct Kitty {
-        uint256 geneticCode; // ili string kako smo pricali
+        uint256 geneticCode;
         uint32 parent1_id;
         uint32 parent2_id;
         uint16 generation;
@@ -16,10 +16,6 @@ contract KittyBase {
     /*** EVENTS ***/
 
     event Birth(address owner, uint256 geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint32 _id);
-
-    /// @dev Transfer event as defined in current draft of ERC721. Emitted every time a kitten
-    ///  ownership is assigned, including births.
-    event Transfer(address from, address to, uint256 tokenId);
 
     function createKitty(
         address _owner,
