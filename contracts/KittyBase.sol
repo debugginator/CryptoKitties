@@ -17,13 +17,13 @@ contract KittyBase {
 
     event Birth(address owner, uint256 geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint32 _id);
 
-    function createKitty(
+    function _createKitty(
         address _owner,
         uint256 _geneticCode,
         uint32 _parent1_id,
         uint32 _parent2_id,
         uint16 _generation) 
-        public
+        internal
         returns (uint)
     {
         Kitty memory _kitty = Kitty({
@@ -47,12 +47,16 @@ contract KittyBase {
         uint256 geneticCode,
         uint32 parent1_id,
         uint32 parent2_id,
-        uint16 generation)
+        uint16 generation,
+        uint64 birthTime)
     {
-        return (kitties[_id].geneticCode,
-                kitties[_id].parent1_id,
-                kitties[_id].parent2_id,
-                kitties[_id].generation);
+      require(_id >= 0 && _id < kitties.length);
+
+      return (kitties[_id].geneticCode,
+              kitties[_id].parent1_id,
+              kitties[_id].parent2_id,
+              kitties[_id].generation,
+              kitties[_id].birthTime);
     }
 
 }

@@ -1,25 +1,25 @@
-const KittyOwnership = artifacts.require("KittyOwnership");
+// const KittyCore = artifacts.require("KittyCore");
 
-contract("KittyOwnership", accounts => {
-  it("Should create a token for the 0-idx kitty and give ownership to account 0.", () => {
-    let ownership;
+// contract("KittyOwnership(+core)", accounts => {
+//   it("Should create first two kitties and give ownerships to first two accounts respectfully.",
+//     () => {
+//       let ownership;
 
-    KittyOwnership.deployed()
-      .then(instance => { // Create our token
-        ownership = instance;
-        return instance.mint(accounts[0], 0);
-      })
-      .then(success => {  // Inquire balance of token owner
-        assert.true(success);
-        return ownership.balanceOf(accounts[0])
-      })
-      .then(balance => { // Inquire owner of token
-        assert.equal(balance, 1);
-        return ownership.ownerof(0);
-      })
-      .then(owner => {
-        assert.equal(owner, accounts[0]);
-      });
-  
-  });
-});
+//       return KittyCore.deployed()
+//         .then(instance => { // Create our token
+//           ownership = instance;
+//           return instance.createFirstKitties();
+//         })
+//         .then(() => {
+//           return ownership.balanceOf(accounts[0]);
+//         })
+//         .then(balance => { // Assert owner's balance
+//           console.log("BALAZI" + balance);
+//           assert.equal(balance.toNumber(), 1);
+//           return ownership.ownerof(0);
+//         })
+//         .then(owner => { // Assert token's owner
+//           assert.equal(owner, accounts[0]);
+//         });
+//     });
+// });
