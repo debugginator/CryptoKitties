@@ -9,8 +9,11 @@
   "dependencies": {
     "openzeppelin-solidity": "^2.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "truffle": "^5.0.2"
+  },
   "scripts": {
+    "run": "truffle develop",
     "test": "truffle test"
   },
   "repository": {
