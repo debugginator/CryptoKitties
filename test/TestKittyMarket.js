@@ -62,7 +62,7 @@ contract("KittyMarket", accounts => {
       //It's OK
     }
 
-    //Treba jos addert za provjeriti novog ownera
+    //Treba jos assert za provjeriti novog ownera
   });
 
 });
