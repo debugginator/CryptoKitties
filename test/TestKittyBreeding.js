@@ -1,6 +1,7 @@
 const KittyCore = artifacts.require("KittyCore");
 
 contract("KittyCore", accounts => {
+
   it("Should create two kitties and breed them into a third", async () => {
     let core = await KittyCore.deployed();
     await core.createFirstKitties();
