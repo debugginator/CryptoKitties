@@ -1,4 +1,4 @@
-const KittyMarket = artifacts.require("KittyMarket");
+const KittyCore = artifacts.require("KittyCore");
 
 contract("KittyMarket", accounts => {
 
