@@ -17,11 +17,15 @@ contract KittyMarket is KittyOwnership {
 
     function buyKitty(uint32 kittyId) external payable {
       uint32 price = kittyIndexToPrice[kittyId];
-      
+
       require(price >= 0);
       require(msg.value >= price);
 
       delete kittyIndexToPrice[kittyId];
       safeTransferFrom(ownerOf(kittyId), msg.sender, kittyId);
+    }
+
+    function getKittyPrice(uint32 kittyId) view public returns (uint32){
+      return kittyIndexToPrice[kittyId];
     }
 }

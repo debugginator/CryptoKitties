@@ -9,15 +9,17 @@ contract("KittyMarket", accounts => {
     await core.putKittyUpForSale(0,150);
     await core.putKittyUpForSale(1,15);
     //Let's try and put this kitty on market one more time with different price
+    /*
     try{
       await core.putKittyUpForSale(1,400);
     }
     catch(err){
       alert("Nice try :P");
     }
+    */
 
-    let price1 = await core.kittyIndexToPrice[0];
-    let price2 = await core.kittyIndexToPrice[1];
+    let price1 = await core.getKittyPrice(0);
+    let price2 = await core.getKittyPrice(1);
     assert.equal(price1, 150);
     assert.equal(price2, 15);
   });
@@ -33,11 +35,11 @@ contract("KittyMarket", accounts => {
     await core.cancelSale(1);
 
     try{
-      let price1 = await core.kittyIndexToPrice[0];
-      let price2 = await core.kittyIndexToPrice[1];
+      let price1 = await core.getKittyPrice(0);
+      let price2 = await core.getKittyPrice(1);
       assert.equal(price1, 150);
       assert.equal(price2, 15);
-      throw "ERROR! Kitties still on sale!";
+      alert("ERROR! Kitties still on sale!");
     }
     catch(err)
     {
@@ -53,9 +55,10 @@ contract("KittyMarket", accounts => {
     await core.putKittyUpForSale(1,15);
     //Now, let's buy one
     core.buyKitty(1);
-    assert.equal(price,15);
+
     try{
-      assert.equal(core.kittyIndexToPrice[1], 15);
+      let price = await core.getKittyPrice(1);
+      assert.equal(price, 15);
     }
     catch(err)
     {
