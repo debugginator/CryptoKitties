@@ -1,0 +1,42 @@
+\documentclass[times, utf8, tehnicka_dokumentacija]{fer}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\newarray\tim
+
+\def \naslov {CryptoKitties na Ethereum mreži}
+\def \ver {1.0}
+\def \broj {4}
+\readarray{tim}{Ivan Mihaljević&Blaž Bagić&Karlo Vrbić&Mateo Gobin}
+\def \mentor {Federico Matteo Benčić}
+
+\fancypagestyle{plain}
+
+\begin{document}
+
+\title{\naslov}
+\verzija{\ver}
+\author{\tim}
+\size{\broj}
+\voditelj{\mentor}
+
+\maketitle
+\tableofcontents
+
+\chapter{Uvod}
+CryptoKitties je sustav za implementirati sustav uzgajanje i preprodaju virtualnih mačaka. U CryptoKitties sustavu, korisnici prikupljaju i uzgajaju virtualne mačke! Svaka mačka ima jedinstveni genom koji ju definira. Korisnici mogu uzgajati svoje mačke kako bi stvorili nove mačke koje se raylikuju od ostalih po svom genomu.
+
+CryptoKitties je implementiran kao raspodijeljeni sustav zasnovan na {\it blockhain} tehnologiji. {\it Blockhain} je tehnologija pomoću koje implementirati raspodijeljene i decentralizirane sustave, a funkcionira kao lista zapisa, koji nazivamo {\it blokovima}, a koji su povezani jedni s drugima tako tvoreći jedan lanac blokova. Iako CryptoKitties nije digitalna valuta, nudi istu sigurnost: svaka je mačka jedinstvena i zna se točno njen vlasnik. Ne može se ponoviti, oduzeti ili uništiti.
+
+\chapter{Tehnologija}
+Sustav je implementiran pomoću {\it Ethereum} blockchain tehnologije. Ethereum je decentralizirana platforma koja ima mogućnost pokretanja tzv. {\it smart contract-a}, tj. aplikacija koje rade točno onako kako su programirane bez ikakve mogućnosti zastoja, cenzure, prijevare ili uplitanja trećih strana. Na taj način možemo grantirati sigurnost pri preprodaji i parenju mačaka.
+
+Za razvoj i testiranje pametnih ugovora korišten je alat {\it Truffle} koji omogućava simuliranje {\it Ethereum} mreže lokalno na osobnom računalu. Ovaj alat nam omogućava kompilaciju pametnih ugovora, automatsko testiranje pomoću {\it JavaScript} biblioteka {\it Mocha} i {\it Chai}, skriptiran deployment i migracije i još mnogo funkcionalnosti koje olakšavaju razvoj pametnih ugovora na {\it Ethereum} mreži.
+
+\chapter{Zaključak}
+Zaključak.
+
+\bibliography{literatura}
+\bibliographystyle{fer}
+
+\end{document}
