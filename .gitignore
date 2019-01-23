@@ -15,3 +15,8 @@ config/development/*.sol.js
 config/test/contracts.json
 build
 dist
+
+documentation/*.aux
+documentation/*.dvi
+documentation/*.synctex.gz
+documentation/*.toc
