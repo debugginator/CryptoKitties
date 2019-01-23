@@ -2,6 +2,32 @@
 \usepackage{booktabs}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
+\usepackage{indentfirst}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  morekeywords={function,internal,returns,uint256,uint32,uint16,address,emit,unit,return,is,contract},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
 \newarray\tim
 
 \def \naslov {CryptoKitties na Ethereum mreži}
@@ -29,9 +55,124 @@ CryptoKitties je sustav za implementirati sustav uzgajanje i preprodaju virtualn
 CryptoKitties je implementiran kao raspodijeljeni sustav zasnovan na {\it blockhain} tehnologiji. {\it Blockhain} je tehnologija pomoću koje implementirati raspodijeljene i decentralizirane sustave, a funkcionira kao lista zapisa, koji nazivamo {\it blokovima}, a koji su povezani jedni s drugima tako tvoreći jedan lanac blokova. Iako CryptoKitties nije digitalna valuta, nudi istu sigurnost: svaka je mačka jedinstvena i zna se točno njen vlasnik. Ne može se ponoviti, oduzeti ili uništiti.
 
 \chapter{Tehnologija}
-Sustav je implementiran pomoću {\it Ethereum} blockchain tehnologije. Ethereum je decentralizirana platforma koja ima mogućnost pokretanja tzv. {\it smart contract-a}, tj. aplikacija koje rade točno onako kako su programirane bez ikakve mogućnosti zastoja, cenzure, prijevare ili uplitanja trećih strana. Na taj način možemo grantirati sigurnost pri preprodaji i parenju mačaka.
+Sustav je implementiran korištenjem raznih tehnologija i knjižnica kao npr. {\it Ethereum}, {\it Truffle}, {\it JavaScript} i sl.
 
-Za razvoj i testiranje pametnih ugovora korišten je alat {\it Truffle} koji omogućava simuliranje {\it Ethereum} mreže lokalno na osobnom računalu. Ovaj alat nam omogućava kompilaciju pametnih ugovora, automatsko testiranje pomoću {\it JavaScript} biblioteka {\it Mocha} i {\it Chai}, skriptiran deployment i migracije i još mnogo funkcionalnosti koje olakšavaju razvoj pametnih ugovora na {\it Ethereum} mreži.
+\section{Ethereum}
+{\it Ethereum}  je decentralizirana platforma koja ima mogućnost pokretanja tzv. {\it smart contract-a}, tj. aplikacija koje rade točno onako kako su programirane bez ikakve mogućnosti zastoja, cenzure, prijevare ili uplitanja trećih strana. Na taj način možemo grantirati sigurnost pri preprodaji i uzgajanju mačaka.
+
+\section{Truffle}
+Za razvoj i testiranje pametnih ugovora korišten je alat {\it Truffle} koji omogućava simuliranje {\it Ethereum} mreže lokalno na osobnom računalu. Ovaj alat nam omogućava kompilaciju pametnih ugovora, automatsko testiranje pomoću {\it JavaScript} knjižnica {\it Mocha} i {\it Chai}, skriptiran deployment i migracije i još mnogo funkcionalnosti koje olakšavaju razvoj pametnih ugovora na {\it Ethereum} mreži.
+
+\section{JavaScript}
+{\it JavaScript} je skriptni programski jezik koji CryptoKitties sustav koristi za migracije i testiranje pametnih ugovora. Za testiranje funkcionalnosti poput kreiranja, uzgajanja, prodaje ali i otkayivanje prodaje mačaka korištena je posebna {\it JavaScript} knjižnica imena {\it Mocha} i {\it Chai}. Konkretno {\it Mocha} je knjižnica koja nam omogućava asinkrono testiranje dok je knjižnica {\it Chai} tzv. {\it assertion library}, tj. pruža nam metode za provjeru ispravnosti određenih vrijednosti.
+
+\section{OpenZeppelin} 
+{\it OpenZeppelin} je knjižnica za siguran razvoj pametnih ugovora. Ona osigurava implementaciju standarda kao što su ERC20 i ERC721, kao i komponente {\it Solidity} za izradu prilagođenih ugovora i složenijih decentraliziranih sustava.
+
+\chapter{Tehničke značajke}
+
+\section{Kreiranje mačaka}
+Korisnicima se za početak mora pounditi određeni broj mačaka. U isječku koda \ref{lst:createkitty} vidimo kako se to odvija. Metoda \lstinline|_createKitty| je odgovorna za stvaranje mačke i emitiranje događaja \lstinline|Birth| definiranog na način prikazan u odsječku.
+
+\begin{figure}
+\begin{lstlisting}
+event Birth(address owner, uint256 geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint32 _id);
+
+function _createKitty(address _owner, uint256 _geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint16 _generation) internal returns (uint)
+{
+    Kitty memory _kitty = Kitty({
+        geneticCode: _geneticCode,
+        parent1_id: _parent1_id,
+        parent2_id: _parent2_id,
+        generation: _generation,
+        birthTime: uint64(now)
+    });
+    uint32 _kittyId = uint32(kitties.push(_kitty) - 1);
+    emit Birth(_owner, _geneticCode, _parent1_id, _parent2_id, _kittyId);
+    return _kittyId;
+}
+\end{lstlisting}
+\caption{Kod za kreiranje mačke}
+\label{lst:createkitty}
+\end{figure}
+
+\section{Prodaja mačaka}
+Jedna od glavnih značajki ovog sustava je prodaja mačaka. Korisnici između sebe mogu prodavati mačke koje posjeduju za određenu cijenu. To podrazumijeva kupovanje mačaka sa tržišta, stavljanje mačke na tržište i povlačenje mačke sa tržišta ukoliko se korisnik predomislio. Pametni ugovor za tržište mačaka je prikazan na \ref{lst:kittymarket}
+
+\begin{figure}
+\begin{lstlisting}
+contract KittyMarket is KittyOwnership {
+    mapping (uint32 => uint256) public kittyIndexToPrice;
+
+    function putKittyUpForSale(uint32 kittyId, uint256 price) external {
+        require(ownerOf(kittyId) == msg.sender);
+        kittyIndexToPrice[kittyId] = price;
+    }
+
+    function cancelSale(uint32 kittyId) external {
+       require(ownerOf(kittyId) == msg.sender);
+       kittyIndexToPrice[kittyId] = 0;
+    }
+
+    function buyKitty(uint32 kittyId) external payable {
+       uint256 price = kittyIndexToPrice[kittyId];
+       address payable owner = address(uint160(ownerOf(kittyId)));
+
+       require(owner != msg.sender);
+       require(price > 0);
+       require(msg.value >= price);
+
+       kittyIndexToPrice[kittyId] = 0;
+       _transferFrom(ownerOf(kittyId), msg.sender, kittyId);
+       owner.transfer(msg.value);
+    }
+}
+\end{lstlisting}
+\caption{Pametni ugovor za tržište mačaka}
+\label{lst:kittymarket}
+\end{figure}
+
+\section{Uzgajanje mačaka}
+Uzgajanje mačaka je značajka koja korisnicima pruža način da parenjem dviju mačaka dobiju dijete mačku. Kako mačke u sustavu nemaju spol nije bitno koje dvije mačke se pare. Pametni ugovor za parenje mačaka prikazan je na \ref{lst:kittybreeding} isječku koda.
+
+\begin{figure}
+\begin{lstlisting}
+contract KittyBreeding is KittyOwnership {
+
+  function breedWith(uint32 parent1Id, uint32 parent2Id) 
+    public
+    returns(uint)
+  {
+    require(parent1Id >= 0 && parent2Id >= 0);
+    require(parent1Id != parent2Id);
+    require(ownerOf(parent1Id) == msg.sender);
+    require(ownerOf(parent2Id) == msg.sender);
+
+    Kitty storage parent1 = kitties[parent1Id];
+    Kitty storage parent2 = kitties[parent2Id];
+
+    require(parent1.birthTime != 0 && parent2.birthTime != 0);
+
+    uint16 generation = uint16(max(parent1.generation, parent2.generation) + 1);
+    uint256 geneticCode = cantorPairingFunction(parent1.geneticCode, parent2.geneticCode);
+    uint kittyId = _createKitty(msg.sender, geneticCode, parent1Id, parent2Id, generation);
+
+    mint(msg.sender, uint256(kittyId));
+    return kittyId;
+  }
+
+  function cantorPairingFunction(uint a, uint b) private pure returns (uint) {
+    return (a+b)*(a+b+1)*b/2;
+  }
+
+  function max(uint a, uint b) private pure returns (uint) {
+      return a > b ? a : b;
+  }
+}
+\end{lstlisting}
+\caption{Pametni ugovor za uzgajanje mačaka}
+\label{lst:kittymarket}
+\end{figure}
 
 \chapter{Zaključak}
 Zaključak.
