@@ -50,35 +50,61 @@
 \tableofcontents
 
 \chapter{Uvod}
-CryptoKitties je sustav za implementirati sustav uzgajanje i preprodaju virtualnih mačaka. U CryptoKitties sustavu, korisnici prikupljaju i uzgajaju virtualne mačke! Svaka mačka ima jedinstveni genom koji ju definira. Korisnici mogu uzgajati svoje mačke kako bi stvorili nove mačke koje se raylikuju od ostalih po svom genomu.
+CryptoKitties je sustav za implementirati sustav uzgajanje i preprodaju virtualnih mačaka. U CryptoKitties sustavu,
+korisnici prikupljaju i uzgajaju virtualne mačke! Svaka mačka ima jedinstveni genom koji ju definira. Korisnici mogu
+uzgajati svoje mačke kako bi stvorili nove mačke koje se raylikuju od ostalih po svom genomu.
 
-CryptoKitties je implementiran kao raspodijeljeni sustav zasnovan na {\it blockhain} tehnologiji. {\it Blockhain} je tehnologija pomoću koje implementirati raspodijeljene i decentralizirane sustave, a funkcionira kao lista zapisa, koji nazivamo {\it blokovima}, a koji su povezani jedni s drugima tako tvoreći jedan lanac blokova. Iako CryptoKitties nije digitalna valuta, nudi istu sigurnost: svaka je mačka jedinstvena i zna se točno njen vlasnik. Ne može se ponoviti, oduzeti ili uništiti.
+CryptoKitties je implementiran kao raspodijeljeni sustav zasnovan na {\it blockhain} tehnologiji. {\it Blockhain} je
+tehnologija pomoću koje implementirati raspodijeljene i decentralizirane sustave, a funkcionira kao lista zapisa, koji
+nazivamo {\it blokovima}, a koji su povezani jedni s drugima tako tvoreći jedan lanac blokova. Iako CryptoKitties nije
+digitalna valuta, nudi istu sigurnost: svaka je mačka jedinstvena i zna se točno njen vlasnik. Ne može se ponoviti,
+oduzeti ili uništiti.
 
 \chapter{Tehnologija}
-Sustav je implementiran korištenjem raznih tehnologija i knjižnica kao npr. {\it Ethereum}, {\it Truffle}, {\it JavaScript} i sl.
+Sustav je implementiran korištenjem raznih tehnologija i knjižnica kao npr. {\it Ethereum}, {\it Truffle},
+{\it JavaScript} i sl.
 
 \section{Ethereum}
-{\it Ethereum}  je decentralizirana platforma koja ima mogućnost pokretanja tzv. {\it smart contract-a}, tj. aplikacija koje rade točno onako kako su programirane bez ikakve mogućnosti zastoja, cenzure, prijevare ili uplitanja trećih strana. Na taj način možemo grantirati sigurnost pri preprodaji i uzgajanju mačaka.
+{\it Ethereum}  je decentralizirana platforma koja ima mogućnost pokretanja tzv. {\it smart contract-a}, tj. aplikacija
+koje rade točno onako kako su programirane bez ikakve mogućnosti zastoja, cenzure, prijevare ili uplitanja trećih
+strana. Na taj način možemo grantirati sigurnost pri preprodaji i uzgajanju mačaka.
 
 \section{Truffle}
-Za razvoj i testiranje pametnih ugovora korišten je alat {\it Truffle} koji omogućava simuliranje {\it Ethereum} mreže lokalno na osobnom računalu. Ovaj alat nam omogućava kompilaciju pametnih ugovora, automatsko testiranje pomoću {\it JavaScript} knjižnica {\it Mocha} i {\it Chai}, skriptiran deployment i migracije i još mnogo funkcionalnosti koje olakšavaju razvoj pametnih ugovora na {\it Ethereum} mreži.
+Za razvoj i testiranje pametnih ugovora korišten je alat {\it Truffle} koji omogućava simuliranje {\it Ethereum} mreže
+lokalno na osobnom računalu. Ovaj alat nam omogućava kompilaciju pametnih ugovora, automatsko testiranje pomoću
+{\it JavaScript} knjižnica {\it Mocha} i {\it Chai}, skriptiran deployment i migracije i još mnogo funkcionalnosti koje
+olakšavaju razvoj pametnih ugovora na {\it Ethereum} mreži.
 
 \section{JavaScript}
-{\it JavaScript} je skriptni programski jezik koji CryptoKitties sustav koristi za migracije i testiranje pametnih ugovora. Za testiranje funkcionalnosti poput kreiranja, uzgajanja, prodaje ali i otkayivanje prodaje mačaka korištena je posebna {\it JavaScript} knjižnica imena {\it Mocha} i {\it Chai}. Konkretno {\it Mocha} je knjižnica koja nam omogućava asinkrono testiranje dok je knjižnica {\it Chai} tzv. {\it assertion library}, tj. pruža nam metode za provjeru ispravnosti određenih vrijednosti.
+{\it JavaScript} je skriptni programski jezik koji CryptoKitties sustav koristi za migracije i testiranje pametnih
+ugovora. Za testiranje funkcionalnosti poput kreiranja, uzgajanja, prodaje ali i otkayivanje prodaje mačaka korištena
+je posebna {\it JavaScript} knjižnica imena {\it Mocha} i {\it Chai}. Konkretno {\it Mocha} je knjižnica koja nam
+omogućava asinkrono testiranje dok je knjižnica {\it Chai} tzv. {\it assertion library}, tj. pruža nam metode za
+provjeru ispravnosti određenih vrijednosti.
 
-\section{OpenZeppelin} 
-{\it OpenZeppelin} je knjižnica za siguran razvoj pametnih ugovora. Ona osigurava implementaciju standarda kao što su ERC20 i ERC721, kao i komponente {\it Solidity} za izradu prilagođenih ugovora i složenijih decentraliziranih sustava.
+\section{OpenZeppelin}
+{\it OpenZeppelin} je knjižnica za siguran razvoj pametnih ugovora. Ona osigurava implementaciju standarda kao što su
+ERC20 i ERC721, kao i komponente {\it Solidity} za izradu prilagođenih ugovora i složenijih decentraliziranih sustava.
 
 \chapter{Tehničke značajke}
 
 \section{Kreiranje mačaka}
-Korisnicima se za početak mora pounditi određeni broj mačaka. U isječku koda \ref{lst:createkitty} vidimo kako se to odvija. Metoda \lstinline|_createKitty| je odgovorna za stvaranje mačke i emitiranje događaja \lstinline|Birth| definiranog na način prikazan u odsječku.
+Korisnicima se za početak mora pounditi određeni broj mačaka. U isječku koda \ref{lst:createkitty} vidimo kako se to
+odvija. Metoda \lstinline|_createKitty| je odgovorna za stvaranje mačke i emitiranje događaja \lstinline|Birth|
+definiranog na način prikazan u odsječku.
 
 \begin{figure}
 \begin{lstlisting}
 event Birth(address owner, uint256 geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint32 _id);
 
-function _createKitty(address _owner, uint256 _geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint16 _generation) internal returns (uint)
+function _createKitty(
+    address _owner,
+    uint256 _geneticCode,
+    uint32 _parent1_id,
+    uint32 _parent2_id,
+    uint16 _generation)
+    internal
+    returns (uint)
 {
     Kitty memory _kitty = Kitty({
         geneticCode: _geneticCode,
@@ -97,7 +123,9 @@ function _createKitty(address _owner, uint256 _geneticCode, uint32 _parent1_id, 
 \end{figure}
 
 \section{Prodaja mačaka}
-Jedna od glavnih značajki ovog sustava je prodaja mačaka. Korisnici između sebe mogu prodavati mačke koje posjeduju za određenu cijenu. To podrazumijeva kupovanje mačaka sa tržišta, stavljanje mačke na tržište i povlačenje mačke sa tržišta ukoliko se korisnik predomislio. Pametni ugovor za tržište mačaka je prikazan na \ref{lst:kittymarket}
+Jedna od glavnih značajki ovog sustava je prodaja mačaka. Korisnici između sebe mogu prodavati mačke koje posjeduju za
+određenu cijenu. To podrazumijeva kupovanje mačaka sa tržišta, stavljanje mačke na tržište i povlačenje mačke sa tržišta
+ukoliko se korisnik predomislio. Pametni ugovor za tržište mačaka je prikazan na \ref{lst:kittymarket}
 
 \begin{figure}
 \begin{lstlisting}
@@ -133,13 +161,15 @@ contract KittyMarket is KittyOwnership {
 \end{figure}
 
 \section{Uzgajanje mačaka}
-Uzgajanje mačaka je značajka koja korisnicima pruža način da parenjem dviju mačaka dobiju dijete mačku. Kako mačke u sustavu nemaju spol nije bitno koje dvije mačke se pare. Pametni ugovor za parenje mačaka prikazan je na \ref{lst:kittybreeding} isječku koda.
+Uzgajanje mačaka je značajka koja korisnicima pruža način da parenjem dviju mačaka dobiju dijete mačku. Kako mačke u
+sustavu nemaju spol nije bitno koje dvije mačke se pare. Pametni ugovor za parenje mačaka prikazan je na
+\ref{lst:kittybreeding} isječku koda.
 
 \begin{figure}
 \begin{lstlisting}
 contract KittyBreeding is KittyOwnership {
 
-  function breedWith(uint32 parent1Id, uint32 parent2Id) 
+  function breedWith(uint32 parent1Id, uint32 parent2Id)
     public
     returns(uint)
   {
@@ -173,6 +203,9 @@ contract KittyBreeding is KittyOwnership {
 \caption{Pametni ugovor za uzgajanje mačaka}
 \label{lst:kittymarket}
 \end{figure}
+
+\chapter{Korištenje sustava}
+TODO: dodat manual za korištenje sustava
 
 \chapter{Zaključak}
 Zaključak.
