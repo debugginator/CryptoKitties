@@ -22,7 +22,7 @@ contract KittyBase {
         uint256 _geneticCode,
         uint32 _parent1_id,
         uint32 _parent2_id,
-        uint16 _generation) 
+        uint16 _generation)
         internal
         returns (uint)
     {

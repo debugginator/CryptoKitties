@@ -98,24 +98,24 @@ definiranog na način prikazan u odsječku.
 event Birth(address owner, uint256 geneticCode, uint32 _parent1_id, uint32 _parent2_id, uint32 _id);
 
 function _createKitty(
-    address _owner,
-    uint256 _geneticCode,
-    uint32 _parent1_id,
-    uint32 _parent2_id,
-    uint16 _generation)
-    internal
-    returns (uint)
+  address _owner,
+  uint256 _geneticCode,
+  uint32 _parent1_id,
+  uint32 _parent2_id,
+  uint16 _generation)
+  internal
+  returns (uint)
 {
-    Kitty memory _kitty = Kitty({
-        geneticCode: _geneticCode,
-        parent1_id: _parent1_id,
-        parent2_id: _parent2_id,
-        generation: _generation,
-        birthTime: uint64(now)
-    });
-    uint32 _kittyId = uint32(kitties.push(_kitty) - 1);
-    emit Birth(_owner, _geneticCode, _parent1_id, _parent2_id, _kittyId);
-    return _kittyId;
+  Kitty memory _kitty = Kitty({
+    geneticCode: _geneticCode,
+    parent1_id: _parent1_id,
+    parent2_id: _parent2_id,
+    generation: _generation,
+    birthTime: uint64(now)
+  });
+  uint32 _kittyId = uint32(kitties.push(_kitty) - 1);
+  emit Birth(_owner, _geneticCode, _parent1_id, _parent2_id, _kittyId);
+  return _kittyId;
 }
 \end{lstlisting}
 \caption{Kod za kreiranje mačke}
@@ -130,30 +130,30 @@ ukoliko se korisnik predomislio. Pametni ugovor za tržište mačaka je prikazan
 \begin{figure}
 \begin{lstlisting}
 contract KittyMarket is KittyOwnership {
-    mapping (uint32 => uint256) public kittyIndexToPrice;
+  mapping (uint32 => uint256) public kittyIndexToPrice;
 
-    function putKittyUpForSale(uint32 kittyId, uint256 price) external {
-        require(ownerOf(kittyId) == msg.sender);
-        kittyIndexToPrice[kittyId] = price;
-    }
+  function putKittyUpForSale(uint32 kittyId, uint256 price) external {
+    require(ownerOf(kittyId) == msg.sender);
+    kittyIndexToPrice[kittyId] = price;
+  }
 
-    function cancelSale(uint32 kittyId) external {
-       require(ownerOf(kittyId) == msg.sender);
-       kittyIndexToPrice[kittyId] = 0;
-    }
+  function cancelSale(uint32 kittyId) external {
+    require(ownerOf(kittyId) == msg.sender);
+    kittyIndexToPrice[kittyId] = 0;
+  }
 
-    function buyKitty(uint32 kittyId) external payable {
-       uint256 price = kittyIndexToPrice[kittyId];
-       address payable owner = address(uint160(ownerOf(kittyId)));
+  function buyKitty(uint32 kittyId) external payable {
+    uint256 price = kittyIndexToPrice[kittyId];
+    address payable owner = address(uint160(ownerOf(kittyId)));
 
-       require(owner != msg.sender);
-       require(price > 0);
-       require(msg.value >= price);
+    require(owner != msg.sender);
+    require(price > 0);
+    require(msg.value >= price);
 
-       kittyIndexToPrice[kittyId] = 0;
-       _transferFrom(ownerOf(kittyId), msg.sender, kittyId);
-       owner.transfer(msg.value);
-    }
+    kittyIndexToPrice[kittyId] = 0;
+    _transferFrom(ownerOf(kittyId), msg.sender, kittyId);
+    owner.transfer(msg.value);
+  }
 }
 \end{lstlisting}
 \caption{Pametni ugovor za tržište mačaka}
@@ -204,11 +204,13 @@ contract KittyBreeding is KittyOwnership {
 \label{lst:kittymarket}
 \end{figure}
 
-\chapter{Korištenje sustava}
-TODO: dodat manual za korištenje sustava
+\chapter{Podjela rada}
+Na razvoju sustava ponajviše je radio Blaž Bagić, dok je Ivan Mihaljević bio zadužen za pisanje testova. Dokumentacija su napisali Karlo Vrbić i Mateo Gobin.
 
 \chapter{Zaključak}
-Zaključak.
+Na implementaciji ovog sustava korištene su tehnologije za razvoj decentraliziranih raspodijeljenih sustava. Tehnlogije poput {\it blockchaina} i {\it NFT}-a i svakako će biti zanimljivo pratiti kako će ove tehnologije utjecati i mjenjati način razvoja informatičkih sustava.
+
+Izrada {\it CryptoKitties} je bila zabavno i poučno isksutvo kroz koje smo naučili osnove {\it Ethereum} pametnih ugovora i {\it Non-Fungible Token}-a. Nastavak rada na {\it CryptoKitties} sustavu bi svakako podrazumijevao razvoj korisničkog sučelja, primarno web aplikacije kroz koju bi korisnici mogli koristiti sustav.
 
 \bibliography{literatura}
 \bibliographystyle{fer}
